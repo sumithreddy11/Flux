@@ -104,8 +104,5 @@
               Built with Go • Security-first
                   
 
-   
 
-
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/01ef4786-50af-42d5-8765-851cbb067859" />
 
