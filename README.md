@@ -1,108 +1,100 @@
-                    🔐 FLUX
-        Secure CLI File Transfer in Go
+# 🔐 Flux
 
-   End-to-end encrypted file transfer built
-   around AES-256-GCM + SHA-256 integrity checks.
+### Secure Command-Line File Transfer in Go
 
-        [ Go ] [ AES-256-GCM ] [ SHA-256 ]
-        [ CLI ] [ HTTP ] [ Security Tests ]
+Flux is a security-focused command-line file transfer system written in Go.
 
-------------------------------------------------------------
+It encrypts files **before they leave the sender** using **AES-256-GCM**, transfers only the encrypted payload through the server, and verifies the decrypted file using **SHA-256 integrity verification**.
 
-                    WHY FLUX?
+> **Plaintext stays on the sender and receiver. The server stores encrypted data.**
 
-     Send files without giving the server access
-                    to plaintext data.
+<p align="center">
 
-             Sender                  Receiver
-               │                        ▲
-               ▼                        │
-            SHA-256                     │
-               │                        │
-               ▼                        │
-          AES-256-GCM                   │
-               │                        │
-               ▼                        │
-        Encrypted Payload ──► Server ──┘
-                              │
-                              ▼
-                         Stored Ciphertext
+**Go • AES-256-GCM • SHA-256 • HTTP • CLI**
 
-------------------------------------------------------------
+</p>
 
-                    🔒 SECURITY
+---
 
-  ✓ AES-256-GCM authenticated encryption
-  ✓ Tamper detection
-  ✓ Wrong-key rejection
-  ✓ SHA-256 integrity verification
-  ✓ Encryption happens before upload
-  ✓ Server stores encrypted payload
+## ✨ Why Flux?
 
-------------------------------------------------------------
+Traditional file-transfer systems often rely on the server to handle or temporarily store plaintext files.
 
-                    ⚡ QUICK START
+The server does not need the encryption key to store and transfer the encrypted file.
+Flux takes a different approach:
 
-  # Start server
-  go run ./cmd/server
+```text
+                         FLUX
 
-  # Send
-  go run ./cmd/flux send photo.jpg
+        SENDER                              RECEIVER
+          │                                    ▲
+          │                                    │
+       File                               Encrypted File
+          │                                    │
+          ▼                                    │
+      SHA-256                                  │
+          │                                    │
+          ▼                                    │
+   AES-256-GCM Encrypt                         │
+          │                                    │
+          ▼                                    │
+   Encrypted Payload                           │
+          │                                    │
+          └──────────────► SERVER ─────────────┘
+                           │
+                           │
+                    Stores encrypted
+                    payload + metadata
 
-  # Receive
-  go run ./cmd/flux receive <transfer-id> <key>
+##🚀 Features
+🔐 AES-256-GCM authenticated encryption
+🛡️ Ciphertext tamper detection
+🔑 Wrong-key rejection
+#️⃣ SHA-256 integrity verification
+📦 Encrypted file upload/download
+🆔 Unique transfer IDs
+📋 Self-describing transfer metadata
+🔄 Transfer status tracking
+💻 Command-line sender and receiver
+🌐 HTTP-based transfer server
+🧪 Automated security tests
+⚡ Stream-based encryption for file transfers
 
-------------------------------------------------------------
-
-                 🧪 SECURITY TESTING
-
-  go test ./...
-
-  ✓ Encryption/decryption
-  ✓ Stream encryption
-  ✓ Tampered ciphertext
-  ✓ Wrong encryption key
-  ✓ SHA-256 mismatch
-  ✓ Transfer metadata
-
-------------------------------------------------------------
-
-                  🏗 ARCHITECTURE
-
-              cmd/
-             /    \
-          flux    server
-           │        │
-           ▼        ▼
-        crypto   network
-           │        │
-           └──► transfer
-                    │
-                    ▼
-                 storage
-
-------------------------------------------------------------
-
-                    🗺 ROADMAP
-
-  ✓ Single-file transfers
-  ✓ Encryption
-  ✓ Integrity verification
-  ✓ Metadata
-  ✓ CLI
-  ✓ HTTP server
-
-  → Resumable transfers
-  → Multi-file transfers
-  → Progress tracking
-  → Authentication
-  → Expiring transfers
-  → Web interface
-
-------------------------------------------------------------
-
-              Built with Go • Security-first
-                  
+##Architecturflux/
+│
+├── cmd/
+│   │
+│   ├── flux/
+│   │   ├── main.go
+│   │   └── main_test.go
+│   │
+│   └── server/
+│       └── main.go
+│
+├── internal/
+│   │
+│   ├── crypto/
+│   │   ├── encrypt.go
+│   │   ├── hash.go
+│   │   ├── stream.go
+│   │   ├── encrypt_test.go
+│   │   └── stream_test.go
+│   │
+│   ├── network/
+│   │   └── server.go
+│   │
+│   ├── storage/
+│   │   └── ...
+│   │
+│   └── transfer/
+│       ├── create.go
+│       ├── create_test.go
+│       ├── manager.go
+│       └── metadata.go
+│
+├── .gitignore
+├── go.mod
+└── README.mde
 
 
 
