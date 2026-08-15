@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------
 
-                    🚀 WHY FLUX?
+                    WHY FLUX?
 
      Send files without giving the server access
                     to plaintext data.
