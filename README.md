@@ -60,7 +60,7 @@ Flux takes a different approach:
 🧪 Automated security tests
 ⚡ Stream-based encryption for file transfers
 
-##Architecturflux/
+## Architectureflux/
 │
 ├── cmd/
 │   │
