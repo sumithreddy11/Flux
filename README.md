@@ -47,19 +47,19 @@ Flux takes a different approach:
                     payload + metadata
 
 ##🚀 Features
-🔐 AES-256-GCM authenticated encryption
-🛡️ Ciphertext tamper detection
-🔑 Wrong-key rejection
-#️⃣ SHA-256 integrity verification
-📦 Encrypted file upload/download
-🆔 Unique transfer IDs
-📋 Self-describing transfer metadata
-🔄 Transfer status tracking
-💻 Command-line sender and receiver
-🌐 HTTP-based transfer server
-🧪 Automated security tests
-⚡ Stream-based encryption for file transfers
-
+ 1.AES-256-GCM authenticated encryption
+ 2.Ciphertext tamper detection
+ 3.Wrong-key rejection
+ 4.#️SHA-256 integrity verification
+ 5.Encrypted file upload/download
+ 6.Unique transfer IDs
+ 7.Self-describing transfer metadata
+ 8.Transfer status tracking
+ 9.Command-line sender and receiver
+ 10.HTTP-based transfer server
+ 11.Automated security tests
+ 12.Stream-based encryption for file transfers
+---
 ## Architectureflux/
 │
 ├── cmd/
