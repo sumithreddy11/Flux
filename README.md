@@ -46,7 +46,7 @@ Flux takes a different approach:
                     Stores encrypted
                     payload + metadata
 
-##🚀 Features
+### Features
  1.AES-256-GCM authenticated encryption
  2.Ciphertext tamper detection
  3.Wrong-key rejection
@@ -60,6 +60,7 @@ Flux takes a different approach:
  11.Automated security tests
  12.Stream-based encryption for file transfers
 ---
+
 ## Architectureflux/
 │
 ├── cmd/
