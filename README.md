@@ -46,7 +46,7 @@ Flux takes a different approach:
                     Stores encrypted
                     payload + metadata
 
-### Features
+## Features
  1.AES-256-GCM authenticated encryption
  2.Ciphertext tamper detection
  3.Wrong-key rejection
