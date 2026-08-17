@@ -1,79 +1,58 @@
-# 🔐 Flux
+##  Why Flux?
 
-### Secure Command-Line File Transfer in Go
+Traditional file-transfer systems often rely on the server to handle temporary plaintext files.
 
-Flux is a security-focused command-line file transfer system written in Go.
-
-It encrypts files **before they leave the sender** using **AES-256-GCM**, transfers only the encrypted payload through the server, and verifies the decrypted file using **SHA-256 integrity verification**.
-
-> **Plaintext stays on the sender and receiver. The server stores encrypted data.**
-
-<p align="center">
-
-**Go • AES-256-GCM • SHA-256 • HTTP • CLI**
-
-</p>
-
----
-
-## ✨ Why Flux?
-
-Traditional file-transfer systems often rely on the server to handle or temporarily store plaintext files.
-
-The server does not need the encryption key to store and transfer the encrypted file.
-Flux takes a different approach:
+The server does not need the encryption key to store and transfer the encrypted file. Flux takes a different approach:
 
 ```text
                          FLUX
 
-        SENDER                              RECEIVER
-          │                                    ▲
-          │                                    │
-       File                               Encrypted File
-          │                                    │
-          ▼                                    │
-      SHA-256                                  │
-          │                                    │
-          ▼                                    │
-   AES-256-GCM Encrypt                         │
-          │                                    │
-          ▼                                    │
-   Encrypted Payload                           │
-          │                                    │
-          └──────────────► SERVER ─────────────┘
-                           │
-                           │
-                    Stores encrypted
-                    payload + metadata
+        SENDER                         RECEIVER
+          │                               ▲
+          │                               │
+         File                        Encrypted File
+          │                               │
+       SHA-256                            │
+          │                               │
+          ▼                               │
+   AES-256-GCM Encrypt                    │
+          │                               │
+          ▼                               │
+   Encrypted Payload                     │
+          │                               │
+          └──────────► SERVER ────────────┘
+                         │
+                         │
+                  Stores encrypted
+                  payload + metadata
+```
 
-## Features
- 1.AES-256-GCM authenticated encryption
- 2.Ciphertext tamper detection
- 3.Wrong-key rejection
- 4.#️SHA-256 integrity verification
- 5.Encrypted file upload/download
- 6.Unique transfer IDs
- 7.Self-describing transfer metadata
- 8.Transfer status tracking
- 9.Command-line sender and receiver
- 10.HTTP-based transfer server
- 11.Automated security tests
- 12.Stream-based encryption for file transfers
----
+##  Features
 
-## Architectureflux/
-│
+-  **AES-256-GCM authenticated encryption**
+-  **Ciphertext tamper detection**
+-  **Strong encryption key validation**
+- #️ **SHA-256 integrity verification**
+-  **Encrypted file upload**
+-  **Encrypted file download**
+-  **Unique transfer IDs**
+-  **Self-describing transfer metadata**
+-  **HTTP-based transfer server**
+-  **Automated security tests**
+-  **Stream-based encryption for large files**
+-  **Command-line interface**
+
+##  Architecture
+
+```text
+flux/
 ├── cmd/
-│   │
 │   ├── flux/
-│   │   ├── main.go
-│   │   └── main_test.go
-│   │
+│   │   └── main.go
 │   └── server/
 │       └── main.go
 │
 ├── internal/
-│   │
 │   ├── crypto/
 │   │   ├── encrypt.go
 │   │   ├── hash.go
@@ -85,7 +64,7 @@ Flux takes a different approach:
 │   │   └── server.go
 │   │
 │   ├── storage/
-│   │   └── ...
+│   │   └── storage.go
 │   │
 │   └── transfer/
 │       ├── create.go
@@ -93,9 +72,306 @@ Flux takes a different approach:
 │       ├── manager.go
 │       └── metadata.go
 │
-├── .gitignore
+├── storage/
 ├── go.mod
-└── README.mde
+├── LICENSE
+├── .gitignore
+└── README.md
+```
 
+##  System Flow
 
+```text
+Sender
+  │
+  ▼
+Select File
+  │
+  ▼
+SHA-256
+  │
+  ▼
+AES-256-GCM Encryption
+  │
+  ▼
+Encrypted Payload
+  │
+  ▼
+Flux Server
+  │
+  ├── Encrypted Payload
+  └── Transfer Metadata
+  │
+  ▼
+Receiver
+  │
+  ▼
+Download Encrypted Payload
+  │
+  ▼
+AES-256-GCM Decryption
+  │
+  ▼
+SHA-256 Verification
+  │
+  ▼
+Verified File
+```
 
+##  Testing
+
+Run the complete test suite:
+
+```bash
+go test ./...
+```
+
+The test suite covers:
+
+-  Encryption and decryption
+-  Stream encryption/decryption
+-  Tampered ciphertext detection
+-  Wrong encryption key rejection
+-  SHA-256 integrity verification
+-  Transfer metadata creation
+-  Transfer metadata validation
+
+##  Transfer Metadata
+
+Each transfer contains self-describing metadata:
+
+| Field | Description |
+|---|---|
+| `version` | Transfer protocol version |
+| `id` | Unique transfer identifier |
+| `status` | Current transfer state |
+| `files` | Files associated with the transfer |
+| `chunk_size` | Configured stream chunk size |
+| `encryption` | Encryption algorithm used |
+| `created_at` | Transfer creation timestamp |
+
+Each file records:
+
+| Field | Description |
+|---|---|
+| `name` | Original filename |
+| `size` | Original file size |
+| `encrypted_size` | Size of encrypted payload |
+| `hash` | SHA-256 hash |
+
+##  Security Model
+
+Flux follows a simple security model:
+
+```text
+                    TRUST BOUNDARY
+
+SENDER                                      RECEIVER
+  │                                            ▲
+  │                                            │
+  │ plaintext                                  │ plaintext
+  │                                            │
+  ▼                                            │
+SHA-256                                        │
+  │                                            │
+  ▼                                            │
+AES-256-GCM                                    │
+  │                                            │
+  ▼                                            │
+┌──────────────────────────────────────────────────┐
+│                  FLUX SERVER                     │
+│                                                  │
+│        ONLY ENCRYPTED DATA IS STORED             │
+│                                                  │
+│        Transfer metadata is stored separately    │
+└──────────────────────────────────────────────────┘
+  │
+  ▼
+Encrypted payload
+```
+
+The encryption key is generated by the sender and is required by the receiver for decryption.
+
+The server handles the encrypted payload but does not need the encryption key to perform the transfer.
+
+##  Integrity Protection
+
+Flux uses two layers of protection:
+
+### AES-256-GCM Authentication
+
+AES-GCM provides authenticated encryption.
+
+If an attacker modifies the encrypted payload, decryption fails instead of silently producing corrupted plaintext.
+
+### SHA-256 Verification
+
+After decryption, the resulting file can be verified against its expected SHA-256 hash.
+
+This allows Flux to detect:
+
+- Corrupted transfers
+- Modified files
+- Unexpected file contents
+- Integrity mismatches
+
+##  Requirements
+
+- Go 1.22+
+- Windows, Linux, or macOS
+- Command-line environment
+
+##  Running Flux
+
+### 1. Start the server
+
+From the project root:
+
+```bash
+go run ./cmd/server
+```
+
+The server starts on:
+
+```text
+http://localhost:8080
+```
+
+### 2. Build the CLI
+
+```bash
+go build -o flux.exe ./cmd/flux
+```
+
+### 3. Send a file
+
+```bash
+flux.exe send test.txt
+```
+
+Flux will:
+
+1. Create a transfer
+2. Generate an encryption key
+3. Encrypt the file
+4. Upload the encrypted payload
+5. Store transfer metadata
+6. Display the transfer ID and encryption key
+
+### 4. Receive a file
+
+```bash
+flux.exe receive <transfer-id> <encryption-key>
+```
+
+Flux will:
+
+1. Download the encrypted payload
+2. Decrypt it using AES-256-GCM
+3. Verify the decrypted file
+4. Reconstruct the original file
+
+##  Storage Model
+
+A transfer is stored on the server using its unique transfer ID:
+
+```text
+storage/
+└── <transfer-id>/
+    ├── metadata.json
+    └── <encrypted-file>
+```
+
+The server does not need to store the original plaintext file.
+
+## ⚙️ Protocol Design
+
+Flux is designed around a self-describing transfer protocol.
+
+A transfer records:
+
+```text
+Transfer
+├── Version
+├── Transfer ID
+├── Status
+├── Created At
+├── Encryption Algorithm
+├── Chunk Size
+└── Files
+    ├── Filename
+    ├── Original Size
+    ├── Encrypted Size
+    └── SHA-256
+```
+
+This design provides a foundation for future protocol extensions without requiring the receiver to guess how a transfer was created.
+
+##  Roadmap
+
+Planned improvements include:
+
+  1.Multiple files per transfer
+  2.Transfer progress indicators
+  3.Resumable uploads
+  4.Resumable downloads
+  5. Large-file optimization
+  6. Transfer expiration
+  7.Better server-side validation
+  8.Concurrent transfers
+  9.Optional authentication
+  10.Encrypted messaging
+  11.Image and document previews
+  12.Cross-platform release binaries
+  13.Versioned transfer protocol
+  14.Improved CLI UX
+
+##  Current Status
+
+Flux currently provides a working end-to-end encrypted file transfer flow:
+
+```text
+File
+  ↓
+SHA-256
+  ↓
+AES-256-GCM
+  ↓
+Encrypted Payload
+  ↓
+HTTP Upload
+  ↓
+Flux Server
+  ↓
+HTTP Download
+  ↓
+AES-256-GCM Decryption
+  ↓
+SHA-256 Verification
+  ↓
+Original File
+```
+
+The core encryption, streaming, transfer metadata, upload, download, and integrity-testing foundations are implemented.
+
+##  Contributing
+
+Contributions and ideas are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run the tests
+
+```bash
+go test ./...
+```
+
+5. Commit your changes
+6. Open a pull request
+
+##  License
+
+Flux is released under the MIT License.
+
+See [`LICENSE`](LICENSE) for details.
