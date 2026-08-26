@@ -307,24 +307,7 @@ Transfer
 
 This design provides a foundation for future protocol extensions without requiring the receiver to guess how a transfer was created.
 
-##  Roadmap
 
-Planned improvements include:
-
-  1.Multiple files per transfer
-  2.Transfer progress indicators
-  3.Resumable uploads
-  4.Resumable downloads
-  5. Large-file optimization
-  6. Transfer expiration
-  7.Better server-side validation
-  8.Concurrent transfers
-  9.Optional authentication
-  10.Encrypted messaging
-  11.Image and document previews
-  12.Cross-platform release binaries
-  13.Versioned transfer protocol
-  14.Improved CLI UX
 
 ##  Current Status
 
