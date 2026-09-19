@@ -42,42 +42,7 @@ The server does not need the encryption key to store and transfer the encrypted 
 -  **Stream-based encryption for large files**
 -  **Command-line interface**
 
-##  Architecture
 
-```text
-flux/
-├── cmd/
-│   ├── flux/
-│   │   └── main.go
-│   └── server/
-│       └── main.go
-│
-├── internal/
-│   ├── crypto/
-│   │   ├── encrypt.go
-│   │   ├── hash.go
-│   │   ├── stream.go
-│   │   ├── encrypt_test.go
-│   │   └── stream_test.go
-│   │
-│   ├── network/
-│   │   └── server.go
-│   │
-│   ├── storage/
-│   │   └── storage.go
-│   │
-│   └── transfer/
-│       ├── create.go
-│       ├── create_test.go
-│       ├── manager.go
-│       └── metadata.go
-│
-├── storage/
-├── go.mod
-├── LICENSE
-├── .gitignore
-└── README.md
-```
 
 ##  System Flow
 
