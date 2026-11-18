@@ -1,3 +1,7 @@
+# Flux Encrypted File Transfer
+
+> **Repository status:** This branch contains the design documentation and license. The Go source and tests described below must be present before the build, run, and test commands can be used.
+
 ##  Why Flux?
 
 Traditional file-transfer systems often rely on the server to handle temporary plaintext files.
